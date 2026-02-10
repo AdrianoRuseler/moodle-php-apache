@@ -39,6 +39,7 @@ services:
       - MOODLE_DB_PASSWORD=moodlepass
       - MOODLE_URL=http://localhost:8080
       - MOODLE_REDIS_HOST=redis
+      - APACHE_DOCUMENT_ROOT=/var/www/html/public
     volumes:
       - moodle_data:/var/www/html
       - moodledata_private:/var/www/moodledata

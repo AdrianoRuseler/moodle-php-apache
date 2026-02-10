@@ -5,7 +5,7 @@ TARGET="/target"
 
 if [ ! -d "$TARGET/.git" ]; then
     echo "🚀 Cloning Moodle..."
-    git clone --depth 1 --branch MOODLE_500_STABLE https://github.com/moodle/moodle.git "$TARGET"
+    git clone --depth 1 --branch MOODLE_501_STABLE https://github.com/moodle/moodle.git "$TARGET"
     
     echo "📝 Creating config.php..."
     cat <<EOF > "$TARGET/config.php"
