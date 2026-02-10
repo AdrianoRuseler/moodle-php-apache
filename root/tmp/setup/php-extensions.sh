@@ -16,14 +16,14 @@ PACKAGES_POSTGRES="libpq5"
 PACKAGES_MYMARIA="libmariadb3"
 
 # Packages for other Moodle runtime dependenices.
-PACKAGES_RUNTIME="ghostscript libaio1 libcurl4 libgss3 libicu72 libmcrypt-dev libxml2 libxslt1.1 \
+PACKAGES_RUNTIME="ghostscript libaio1t64 libcurl4 libgss3 libicu76 libmcrypt-dev libxml2 libxslt1.1 \
   libzip-dev sassc unzip zip"
 
 # Packages for Memcached.
 PACKAGES_MEMCACHED="libmemcached11 libmemcachedutil2"
 
 # Packages for LDAP.
-PACKAGES_LDAP="libldap-2.5-0"
+PACKAGES_LDAP="libldap2"
 
 apt-get update
 apt-get install -y --no-install-recommends apt-transport-https \
@@ -68,12 +68,12 @@ pecl install --configureoptions 'enable-redis-igbinary="yes"' redis
 docker-php-ext-enable redis
 
 # Install, but do not enable, xdebug and xhprof.
-pecl install xdebug xhprof
+#pecl install xdebug xhprof
 
-echo "pcov.enabled=0" >> /usr/local/etc/php/conf.d/10-docker-php-ext-pcov.ini
-echo "pcov.exclude='~\/(tests|coverage|vendor|node_modules)\/~'" >> /usr/local/etc/php/conf.d/10-docker-php-ext-pcov.ini
-echo "pcov.directory=." >> /usr/local/etc/php/conf.d/10-docker-php-ext-pcov.ini
-echo "pcov.initial.files=1024" >> /usr/local/etc/php/conf.d/10-docker-php-ext-pcov.ini
+#echo "pcov.enabled=0" >> /usr/local/etc/php/conf.d/10-docker-php-ext-pcov.ini
+#echo "pcov.exclude='~\/(tests|coverage|vendor|node_modules)\/~'" >> /usr/local/etc/php/conf.d/10-docker-php-ext-pcov.ini
+#echo "pcov.directory=." >> /usr/local/etc/php/conf.d/10-docker-php-ext-pcov.ini
+#echo "pcov.initial.files=1024" >> /usr/local/etc/php/conf.d/10-docker-php-ext-pcov.ini
 
 # Keep our image size down..
 pecl clear-cache
