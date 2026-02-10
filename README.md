@@ -47,11 +47,11 @@ docker exec -it <container_name> composer --version
 ```
 
 ```bash
-docker exec -it -u www-data moodle-app composer install --no-dev --directory=/var/www/html
+docker exec -it -u www-data moodle-app composer install --no-dev --classmap-authoritative
 ```
 
 ## Initialize Moodle database for manual testing
 
 ```bash
-bin/moodle-docker-compose exec webserver php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --summary="Docker moodle site" --adminpass="test" --adminemail="admin@example.com"
+docker exec -it -u www-data moodle-app php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --summary="Docker moodle site" --adminpass="m@0dl3ing" --adminemail="admin@example.com"
 ```

@@ -1,22 +1,28 @@
 services:
   moodle-db:
-    image: postgres:15-alpine
+    image: postgres:alpine
     container_name: moodle-db
     volumes:
       - moodle_db_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=moodle
-      - POSTGRES_USER=moodleuser
-      - POSTGRES_PASSWORD=moodlepass
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
 
   redis:
-    image: redis:7-alpine
+    image: redis:alpine
     container_name: moodle-redis
     restart: always
 
   moodle-init:
     image: alpine/git
     container_name: moodle-init
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - MOODLE_URL=${MOODLE_URL}
+      - MOODLE_VERSION=${MOODLE_VERSION}
     volumes:
       - moodle_data:/target
       - ./init-moodle.sh:/init-moodle.sh:ro
@@ -30,16 +36,17 @@ services:
       moodle-db:
         condition: service_started
     ports:
-      - "8080:80"
+      - "${HOST_PORT}:80"
     environment:
       - MOODLE_DB_TYPE=pgsql
+      - MOODLE_DB_TYPE=pgsql
       - MOODLE_DB_HOST=moodle-db
-      - MOODLE_DB_NAME=moodle
-      - MOODLE_DB_USER=moodleuser
-      - MOODLE_DB_PASSWORD=moodlepass
-      - MOODLE_URL=http://localhost:8080
+      - MOODLE_DB_NAME=${DB_NAME}
+      - MOODLE_DB_USER=${DB_USER}
+      - MOODLE_DB_PASSWORD=${DB_PASS}
+      - MOODLE_URL=${MOODLE_URL}
       - MOODLE_REDIS_HOST=redis
-      - APACHE_DOCUMENT_ROOT=/var/www/html/public
+      - APACHE_DOCUMENT_ROOT=${APACHE_DOC}
     volumes:
       - moodle_data:/var/www/html
       - moodledata_private:/var/www/moodledata
