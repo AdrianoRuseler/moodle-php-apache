@@ -1,0 +1,62 @@
+services:
+  moodle-db:
+    image: postgres:15-alpine
+    container_name: moodle-db
+    volumes:
+      - moodle_db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=moodle
+      - POSTGRES_USER=moodleuser
+      - POSTGRES_PASSWORD=moodlepass
+
+  redis:
+    image: redis:7-alpine
+    container_name: moodle-redis
+    restart: always
+
+  moodle-init:
+    image: alpine/git
+    container_name: moodle-init
+    volumes:
+      - moodle_data:/target
+      - ./init-moodle.sh:/init-moodle.sh:ro
+    entrypoint: [ "/bin/sh", "/init-moodle.sh" ]
+  moodle:
+    image: ruseler/moodle-php-apache:latest
+    container_name: moodle-app
+    depends_on:
+      moodle-init:
+        condition: service_completed_successfully
+      moodle-db:
+        condition: service_started
+    ports:
+      - "8080:80"
+    environment:
+      - MOODLE_DB_TYPE=pgsql
+      - MOODLE_DB_HOST=moodle-db
+      - MOODLE_DB_NAME=moodle
+      - MOODLE_DB_USER=moodleuser
+      - MOODLE_DB_PASSWORD=moodlepass
+      - MOODLE_URL=http://localhost:8080
+      - MOODLE_REDIS_HOST=redis
+    volumes:
+      - moodle_data:/var/www/html
+      - moodledata_private:/var/www/moodledata
+
+  moodle-cron:
+    image: ruseler/moodle-php-apache:latest
+    container_name: moodle-cron
+    depends_on:
+      - moodle-db
+      - moodle
+    volumes:
+      - moodle_data:/var/www/html
+      - moodledata_private:/var/www/moodledata
+    # This runs the Moodle cron script every 60 seconds
+    entrypoint: /bin/sh -c "while true; do php /var/www/html/admin/cli/cron.php; sleep 60; done"
+    restart: always
+
+volumes:
+  moodle_db_data:
+  moodle_data:
+  moodledata_private:
