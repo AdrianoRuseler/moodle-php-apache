@@ -17,7 +17,7 @@ PACKAGES_MYMARIA="libmariadb3"
 
 # Packages for other Moodle runtime dependenices.
 PACKAGES_RUNTIME="ghostscript libaio1t64 libcurl4 libgss3 libicu76 libmcrypt-dev libxml2 libxslt1.1 \
-  libzip-dev sassc unzip zip"
+  libzip-dev sassc unzip zip graphviz python3 poppler-utils aspell dictionaries-common libaspell15 aspell-en aspell-pt-br aspell-doc spellutils"
 
 # Packages for Memcached.
 PACKAGES_MEMCACHED="libmemcached11 libmemcachedutil2"
