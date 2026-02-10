@@ -7,6 +7,11 @@ if [ ! -d "$TARGET/.git" ]; then
     echo "🚀 Cloning Moodle..."
     git clone --depth 1 --branch MOODLE_501_STABLE https://github.com/moodle/moodle.git "$TARGET"
     
+    echo "📦 Installing Composer dependencies..."
+    # We run this inside the TARGET directory where composer.json lives
+    cd "$TARGET"
+    composer install --no-dev --classmap-authoritative
+
     echo "📝 Creating config.php..."
     cat <<EOF > "$TARGET/config.php"
 <?php
@@ -37,4 +42,7 @@ EOF
     echo "✅ Init complete."
 else
     echo "ℹ️ Moodle code already exists, skipping clone."
+    # Optional: Run composer install again in case dependencies changed
+    cd "$TARGET"
+    composer install --no-dev --classmap-authoritative
 fi

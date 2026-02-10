@@ -29,6 +29,7 @@ $defaults['moodle']['pathtopython'] = '/usr/bin/python3';
 
 ## References
 - https://github.com/moodlehq/moodle-php-apache
+- https://github.com/moodlehq/moodle-docker
 - https://github.com/erseco/alpine-moodle
 
 
@@ -42,10 +43,15 @@ Composer dependencies were not found. Make sure the "composer install --no-dev -
 ### Composer
 
 ```bash
-cd ~
-curl -sS https://getcomposer.org/installer -o composer-setup.php
-HASH=`curl -sS https://composer.github.io/installer.sig`
-php -r "if (hash_file('SHA384', 'composer-setup.php') === '$HASH') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-composer --version
+docker exec -it <container_name> composer --version
+```
+
+```bash
+docker exec -it -u www-data moodle-app composer install --no-dev --directory=/var/www/html
+```
+
+## Initialize Moodle database for manual testing
+
+```bash
+bin/moodle-docker-compose exec webserver php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --summary="Docker moodle site" --adminpass="test" --adminemail="admin@example.com"
 ```
