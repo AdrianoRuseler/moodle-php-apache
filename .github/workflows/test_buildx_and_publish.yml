@@ -1,15 +1,13 @@
 name: Test, build and publish
 
 on:
-  push:
-  pull_request:
   workflow_dispatch:
-  workflow_call:
+
 
 env:
   REPOSITORY: moodle-php-apache
-  DOCKERHUB_OWNER: moodlehq
-  GH_OWNER: moodlehq
+  DOCKERHUB_OWNER: ruseler
+  GH_OWNER: ruseler
 
 jobs:
   Test:
