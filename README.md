@@ -91,3 +91,14 @@ docker exec -it -u www-data moodle-app php admin/cli/purge_caches.php
 ```bash
 docker exec -it -u www-data moodle-app php admin/cli/maintenance.php --disable
 ```
+
+
+# Check if Ghostscript is found
+```bash
+docker exec -u www-data moodle-cron gs --version
+```
+
+# Check if Graphviz (dot) is found
+```bash
+docker exec -u www-data moodle-cron dot -V
+```
