@@ -52,7 +52,7 @@ services:
       - moodledata_private:/var/www/moodledata
 
   moodle-cron:
-    image: ruseler/moodle-php-apache:latest
+    image: ruseler/moodle-php-cli:latest
     container_name: moodle-cron
     depends_on:
       - moodle-db

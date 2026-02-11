@@ -27,6 +27,12 @@ global \$CFG;
 \$CFG->dataroot  = '/var/www/moodledata';
 \$CFG->admin     = 'admin';
 
+// System Paths
+\$CFG->pathtogs = '${PATH_TO_GS}';
+\$CFG->pathtodot = '${PATH_TO_DOT}';
+\$CFG->aspellpath = '${PATH_TO_ASPELL}';
+\$CFG->pathtopython = '${PATH_TO_PYTHON}';
+
 \$CFG->directorypermissions = 0777;
 
 require_once(__DIR__ . '/lib/setup.php');

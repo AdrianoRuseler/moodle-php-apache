@@ -19,9 +19,6 @@ PACKAGES_MYMARIA="libmariadb3"
 PACKAGES_RUNTIME="ghostscript libaio1t64 libcurl4 libgss3 libicu76 libmcrypt-dev libxml2 libxslt1.1 \
   libzip-dev sassc unzip zip graphviz python3 poppler-utils aspell dictionaries-common libaspell15 aspell-en aspell-pt-br aspell-doc spellutils"
 
-# Packages for Memcached.
-PACKAGES_MEMCACHED="libmemcached11 libmemcachedutil2"
-
 # Packages for LDAP.
 PACKAGES_LDAP="libldap2"
 
@@ -31,7 +28,6 @@ apt-get install -y --no-install-recommends apt-transport-https \
     $PACKAGES_POSTGRES \
     $PACKAGES_MYMARIA \
     $PACKAGES_RUNTIME \
-    $PACKAGES_MEMCACHED \
     $PACKAGES_LDAP
 
 echo "Installing php extensions"
@@ -57,9 +53,10 @@ docker-php-ext-install -j$(nproc) gd
 docker-php-ext-configure ldap
 docker-php-ext-install -j$(nproc) ldap
 
-# APCu, igbinary, Memcached, PCov, Redis, Solr, timezonedb, uuid
-pecl install apcu igbinary memcached pcov solr timezonedb uuid
-docker-php-ext-enable apcu igbinary memcached pcov solr timezonedb uuid
+# Since you are already using Redis, you generally don't need Memcached.
+# APCu, igbinary, PCov, Redis, Solr, timezonedb, uuid
+pecl install apcu igbinary pcov solr timezonedb uuid
+docker-php-ext-enable apcu igbinary pcov solr timezonedb uuid
 
 echo 'apc.enable_cli = On' >> /usr/local/etc/php/conf.d/10-docker-php-ext-apcu.ini
 

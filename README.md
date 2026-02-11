@@ -31,16 +31,9 @@ $defaults['moodle']['pathtopython'] = '/usr/bin/python3';
 - https://github.com/moodlehq/moodle-php-apache
 - https://github.com/moodlehq/moodle-docker
 - https://github.com/erseco/alpine-moodle
+- https://github.com/tmuras/moosh
 
-
-## Issues
-
-php_setting 	zend.exception_ignore_args
-It is strongly recommended that the PHP setting zend.exception_ignore_args be enabled as a security precaution.
-
-Composer dependencies were not found. Make sure the "composer install --no-dev --classmap-authoritative" command has been run in the Moodle root directory. If you are not using Composer, make sure the vendor directory exists and contains the necessary files.
-
-### Composer
+## Composer
 
 ```bash
 docker exec -it <container_name> composer --version
@@ -54,4 +47,47 @@ docker exec -it -u www-data moodle-app composer install --no-dev --classmap-auth
 
 ```bash
 docker exec -it -u www-data moodle-app php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --summary="Docker moodle site" --adminpass="m@0dl3ing" --adminemail="admin@example.com"
+```
+
+```bash
+docker exec -it -u www-data moodle-cron php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --summary="Docker moodle site" --adminpass="m@0dl3ing" --adminemail="admin@example.com"
+```
+
+## Moodle CLI
+
+docker pull php:8.4-cli-alpine
+docker pull php:8.4-cli-trixie
+
+
+```bash
+docker exec -it -u www-data moodle-cron composer install --no-dev --classmap-authoritative
+```
+
+```bash
+docker exec -it -u www-data moodle-cron php admin/cli/cron.php
+```
+
+```bash
+docker exec -it -u www-data moodle-app php admin/cli/cron.php
+```
+
+```bash
+docker exec -it -u www-data moodle-app php admin/cli/checks.php
+```
+- Enter Maintenance Mode
+```bash
+docker exec -it -u www-data moodle-app php admin/cli/maintenance.php --enable
+```
+- Running Database Upgrade
+```bash
+docker exec -it -u www-data moodle-app php admin/cli/upgrade.php --non-interactive
+```
+
+- Clearing Caches
+```bash
+docker exec -it -u www-data moodle-app php admin/cli/purge_caches.php
+```
+- Disable Maintenance Mode
+```bash
+docker exec -it -u www-data moodle-app php admin/cli/maintenance.php --disable
 ```

@@ -7,34 +7,26 @@ RUN echo "Building for ${TARGETPLATFORM}"
 
 # Install some packages that are useful within the images.
 RUN apt-get update && apt-get install -y \
-    git bc default-mysql-client-core \
+    bc default-mysql-client-core locales \
 && rm -rf /var/lib/apt/lists/*
 
-# Install pickle as an easier alternative to PECL, that is not
-# available any more for PHP 8 and up. Some alternatives searched were:
-#  - https://olvlvl.com/2019-06-docker-pecl-without-pecl
-#  - https://github.com/FriendsOfPHP/pickle
-#  - manually "curl https://pecl.php.net/get/xxxx && tar && docker-php-ext-install xxx"
-# Of course, if the images end using some alternative, we'll switch to it. Just right now
-# there isn't such an alternative.a
-#
-# Update 20201126: Finally, see https://github.com/docker-library/php/issues/1087 it seems that pear/pecl
-# continues being availbale with php8, so we are going to continue using it. The previous comments as
-# left in case we need to find an alternative way to install PECL stuff and there isn't any official.
-# For an example of php80-rc5 near complete, using pickle instead of pear/pecl, look to:
-# https://github.com/stronk7/moodle-php-apache/tree/8.0-buster-pickle-version
 
-# Generate all the UTF-8 locales.
-ARG DEBIAN_FRONTEND=noninteractive
-ADD root/tmp/setup/locales-gen.sh /tmp/setup/locales-gen.sh
-RUN /tmp/setup/locales-gen.sh
+# 2. Configure and generate locales
+RUN sed -i -e 's/# en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/' /etc/locale.gen && \
+    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    sed -i -e 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen
+
+# 3. Set environment variables so PHP/Moodle recognize the locale
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
 # Setup the required extensions.
 ADD root/tmp/setup/php-extensions.sh /tmp/setup/php-extensions.sh
 RUN /tmp/setup/php-extensions.sh
 
 # Copy the Composer binary from the official Composer image
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+#COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN mkdir /var/www/moodledata && chown www-data /var/www/moodledata && \
     mkdir /var/www/phpunitdata && chown www-data /var/www/phpunitdata && \
@@ -49,6 +41,11 @@ ADD root/system-docker-entrypoint.d/wwwroot.sh /system-docker-entrypoint.d/10-ww
 
 # Fix the original permissions of /tmp, the PHP default upload tmp dir.
 RUN chmod 777 /tmp && chmod +t /tmp
+
+# Keep our image size down..
+RUN apt-get autoremove -y
+RUN apt-get clean
+RUN rm -rf /var/lib/apt/lists/*
 
 # Allow configuration of the Apache DocumentRoot via environment variable.
 # Note: Do not specify a default value here, as it will be set in the
