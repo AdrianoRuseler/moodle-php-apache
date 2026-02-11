@@ -14,9 +14,9 @@ services:
     container_name: moodle-redis
     restart: always
 
-  moodle-init:
-    image: alpine/git
-    container_name: moodle-init
+  moodle-cli:
+    image: ruseler/moodle-php-cli:latest
+    container_name: moodle-cli
     environment:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -31,7 +31,7 @@ services:
     image: ruseler/moodle-php-apache:latest
     container_name: moodle-app
     depends_on:
-      moodle-init:
+      moodle-cli:
         condition: service_completed_successfully
       moodle-db:
         condition: service_started

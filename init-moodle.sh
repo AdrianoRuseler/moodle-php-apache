@@ -3,9 +3,18 @@ set -e # Exit immediately if a command fails
 
 TARGET="/target"
 
+# FIX: Add the target directory to the safe list for Git
+echo "🛡️ Configuring Git safe directory..."
+git config --global --add safe.directory "$TARGET"
+
 if [ ! -d "$TARGET/.git" ]; then
     echo "🚀 Cloning Moodle version ${MOODLE_VERSION}..."
     git clone --depth 1 --branch "${MOODLE_VERSION}" https://github.com/moodle/moodle.git "$TARGET"
+
+    echo "📦 Installing Composer dependencies..."
+    # We run this inside the TARGET directory where composer.json lives
+    cd "$TARGET"
+    composer install --no-dev --classmap-authoritative
     
     echo "📝 Creating config.php..."
     cat <<EOF > "$TARGET/config.php"
@@ -43,4 +52,7 @@ EOF
     echo "✅ Init complete."
 else
     echo "ℹ️ Moodle code already exists, skipping clone."
+    # Optional: Run composer install again in case dependencies changed
+    cd "$TARGET"
+    composer install --no-dev --classmap-authoritative
 fi
