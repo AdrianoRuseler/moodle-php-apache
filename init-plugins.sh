@@ -3,19 +3,41 @@ set -e # Exit immediately if a command fails
 
 TARGET="${MDLHOME}"
 
+# Temporary working directories
+WORK_DIR="/tmp/moodle_build"
+MDLCORE="$WORK_DIR/core"
+MDLPLGS="$WORK_DIR/plugins"
+
+rm -rf $WORK_DIR && mkdir -p $WORK_DIR
+
 # FIX: Add the target directory to the safe list for Git
 echo "🛡️ Configuring Git safe directory..."
 git config --global --add safe.directory "$TARGET"
 
 if [ ! -d "$TARGET/.git" ]; then
-    echo "🚀 Cloning Moodle version ${MOODLE_VERSION}..."
-    git clone --depth 1 --branch "${MOODLE_VERSION}" https://github.com/moodle/moodle.git "$TARGET"
+    # 2. 🚀 Clone Core and Plugins
+    echo "📥 Fetching Moodle Core ($MDLBRANCH)..."
+    git clone --depth=1 --branch=$MDLBRANCH $MDLREPO $MDLCORE
 
+    echo "📥 Fetching Custom Plugins ($PLGBRANCH)..."
+    git clone --depth=1 --recursive --branch=$PLGBRANCH $PLGREPO $MDLPLGS
+
+    # 3. 🧩 Merge Plugins into Core
+    echo "📂 Merging plugins into core..."
+    # We use -a (archive) to keep permissions and -v for visibility
+    rsync -av $MDLPLGS/moodle/ $MDLCORE/
+
+    # 4. 📦 Install Composer Dependencies
+    # CRITICAL: This must happen after merging in case plugins have their own requirements
     echo "📦 Installing Composer dependencies..."
-    # We run this inside the TARGET directory where composer.json lives
-    cd "$TARGET"
+    cd $MDLCORE
     composer install --no-dev --classmap-authoritative
-    
+
+    mkdir -p "$MDLHOME"
+    # Move everything including hidden files
+    mv $MDLCORE/* $MDLHOME/
+    mv $MDLCORE/.[!.]* $MDLHOME/ 2>/dev/null || true 
+
     echo "📝 Creating config.php..."
     cat <<EOF > "$TARGET/config.php"
 <?php

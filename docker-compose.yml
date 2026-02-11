@@ -23,9 +23,15 @@ services:
       - DB_PASS=${DB_PASS}
       - MOODLE_URL=${MOODLE_URL}
       - MOODLE_VERSION=${MOODLE_VERSION}
+      - MDLREPO=${MDLREPO}
+      - MDLBRANCH=${MDLBRANCH}
+      - PLGREPO=${PLGREPO}
+      - PLGBRANCH=${PLGBRANCH}
+      - MDLHOME=${MDLHOME}
     volumes:
-      - moodle_data:/target
+      - moodle_data:${MDLHOME}
       - ./init-moodle.sh:/init-moodle.sh:ro
+      - ./install-mdl.sh:/install-mdl.sh:ro
     entrypoint: [ "/bin/sh", "/init-moodle.sh" ]
   moodle:
     image: ruseler/moodle-php-apache:latest
@@ -48,7 +54,7 @@ services:
       - MOODLE_REDIS_HOST=redis
       - APACHE_DOCUMENT_ROOT=${APACHE_DOC}
     volumes:
-      - moodle_data:/var/www/html
+      - moodle_data:${MDLHOME}
       - moodledata_private:/var/www/moodledata
 
   moodle-cron:
@@ -58,10 +64,10 @@ services:
       - moodle-db
       - moodle
     volumes:
-      - moodle_data:/var/www/html
+      - moodle_data:${MDLHOME}
       - moodledata_private:/var/www/moodledata
     # This runs the Moodle cron script every 60 seconds
-    entrypoint: /bin/sh -c "while true; do php /var/www/html/admin/cli/cron.php; sleep 60; done"
+    entrypoint: /bin/sh -c "while true; do php ${MDLHOME}/admin/cli/cron.php; sleep 60; done"
     restart: always
 
 volumes:

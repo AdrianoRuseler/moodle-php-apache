@@ -46,11 +46,11 @@ docker exec -it -u www-data moodle-app composer install --no-dev --classmap-auth
 ## Initialize Moodle database for manual testing
 
 ```bash
-docker exec -it -u www-data moodle-app php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --summary="Docker moodle site" --adminpass="m@0dl3ing" --adminemail="admin@example.com"
+docker exec -it -u www-data moodle-app php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --summary="Docker moodle site" --adminpass="M@0dl3ing" --adminemail="admin@example.com"
 ```
 
 ```bash
-docker exec -it -u www-data moodle-cron php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --summary="Docker moodle site" --adminpass="m@0dl3ing" --adminemail="admin@example.com"
+docker exec -it -u www-data moodle-cron php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --summary="Docker moodle site" --adminpass="M@0dl3ing" --adminemail="admin@example.com"
 ```
 
 ## Moodle CLI
@@ -102,3 +102,8 @@ docker exec -u www-data moodle-cron gs --version
 ```bash
 docker exec -u www-data moodle-cron dot -V
 ```
+
+
+docker exec moodle-db pg_dump -U moodleuser moodle > moodle_backup_$(date +%F).sql
+
+docker exec moodle-db pg_dump -U moodleuser moodle > backup.sql
