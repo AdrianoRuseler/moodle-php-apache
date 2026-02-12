@@ -8,8 +8,8 @@ echo "🛡️ Configuring Git safe directory..."
 git config --global --add safe.directory "$TARGET"
 
 if [ ! -d "$TARGET/.git" ]; then
-    echo "🚀 Cloning Moodle version ${MOODLE_VERSION}..."
-    git clone --depth 1 --branch "${MOODLE_VERSION}" https://github.com/moodle/moodle.git "$TARGET"
+    echo "🚀 Cloning Moodle version ${MDLBRANCH}..."
+    git clone --depth 1 --branch "${MDLBRANCH}" https://github.com/moodle/moodle.git "$TARGET"
 
     echo "📦 Installing Composer dependencies..."
     # We run this inside the TARGET directory where composer.json lives

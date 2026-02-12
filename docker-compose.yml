@@ -22,7 +22,6 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - MOODLE_URL=${MOODLE_URL}
-      - MOODLE_VERSION=${MOODLE_VERSION}
       - MDLREPO=${MDLREPO}
       - MDLBRANCH=${MDLBRANCH}
       - PLGREPO=${PLGREPO}
