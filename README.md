@@ -55,9 +55,7 @@ docker exec -it -u www-data moodle-cron php admin/cli/install_database.php --agr
 
 ## Moodle CLI
 
-docker pull php:8.4-cli-alpine
-docker pull php:8.4-cli-trixie
-
+- FROM php:8.4-cli-trixie
 
 ```bash
 docker exec -it -u www-data moodle-cron composer install --no-dev --classmap-authoritative
@@ -92,18 +90,17 @@ docker exec -it -u www-data moodle-app php admin/cli/purge_caches.php
 docker exec -it -u www-data moodle-app php admin/cli/maintenance.php --disable
 ```
 
-
-# Check if Ghostscript is found
+- Check if Ghostscript is found
 ```bash
 docker exec -u www-data moodle-cron gs --version
 ```
 
-# Check if Graphviz (dot) is found
+- Check if Graphviz (dot) is found
 ```bash
 docker exec -u www-data moodle-cron dot -V
 ```
 
-
+```bash
 docker exec moodle-db pg_dump -U moodleuser moodle > moodle_backup_$(date +%F).sql
-
 docker exec moodle-db pg_dump -U moodleuser moodle > backup.sql
+```
