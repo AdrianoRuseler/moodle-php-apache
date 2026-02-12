@@ -31,8 +31,8 @@ services:
     volumes:
       - moodle_data:${MDLHOME}
       - ./init-moodle.sh:/init-moodle.sh:ro
-      - ./install-mdl.sh:/install-mdl.sh:ro
-    entrypoint: [ "/bin/sh", "/init-moodle.sh" ]
+      - ./init-plugins.sh:/init-plugins.sh:ro
+    entrypoint: [ "/bin/sh", "/init-plugins.sh" ]
   moodle:
     image: ruseler/moodle-php-apache:latest
     container_name: moodle-app

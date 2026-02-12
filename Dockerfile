@@ -7,7 +7,7 @@ RUN echo "Building for ${TARGETPLATFORM}"
 
 # Install some packages that are useful within the images.
 RUN apt-get update && apt-get install -y \
-    bc default-mysql-client-core locales \
+    bc default-mysql-client-core locales wget \
 && rm -rf /var/lib/apt/lists/*
 
 
