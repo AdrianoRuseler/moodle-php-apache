@@ -29,9 +29,8 @@ services:
       - MDLHOME=${MDLHOME}
     volumes:
       - moodle_data:${MDLHOME}
-      - ./init-moodle.sh:/init-moodle.sh:ro
-      - ./init-plugins.sh:/init-plugins.sh:ro
-    entrypoint: [ "/bin/sh", "/init-plugins.sh" ]
+      - ./scripts:/scripts:ro
+    entrypoint: [ "/bin/sh", "/scripts/init-moodle.sh" ]
   moodle:
     image: ruseler/moodle-php-apache:latest
     container_name: moodle-app
