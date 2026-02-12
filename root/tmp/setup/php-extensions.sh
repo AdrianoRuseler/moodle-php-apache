@@ -17,7 +17,8 @@ PACKAGES_MYMARIA="libmariadb3"
 
 # Packages for other Moodle runtime dependenices.
 PACKAGES_RUNTIME="ghostscript libaio1t64 libcurl4 libgss3 libicu76 libmcrypt-dev libxml2 libxslt1.1 \
-  libzip-dev sassc unzip zip graphviz python3 poppler-utils aspell dictionaries-common libaspell15 aspell-en aspell-pt-br aspell-doc spellutils"
+  libzip-dev sassc unzip zip graphviz python3 poppler-utils aspell dictionaries-common libaspell15 \
+  aspell-en aspell-pt-br aspell-doc spellutils libyaml-dev"
 
 # Packages for LDAP.
 PACKAGES_LDAP="libldap2"
@@ -55,8 +56,8 @@ docker-php-ext-install -j$(nproc) ldap
 
 # Since you are already using Redis, you generally don't need Memcached.
 # APCu, igbinary, PCov, Redis, Solr, timezonedb, uuid
-pecl install apcu igbinary pcov solr timezonedb uuid
-docker-php-ext-enable apcu igbinary pcov solr timezonedb uuid
+pecl install apcu igbinary pcov solr timezonedb uuid yaml
+docker-php-ext-enable apcu igbinary pcov solr timezonedb uuid yaml
 
 echo 'apc.enable_cli = On' >> /usr/local/etc/php/conf.d/10-docker-php-ext-apcu.ini
 

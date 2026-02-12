@@ -1,28 +1,46 @@
 #!/bin/sh
 set -e # Exit immediately if a command fails
 
-TARGET="${MDLHOME}"
+# MDLHOME should be defined in your environment or here
+TARGET="${MDLHOME:-/var/www/html}"
 
 # Temporary working directories
 WORK_DIR="/tmp/moodle_build"
+
 MDLCORE="$WORK_DIR/core"
 MDLPLGS="$WORK_DIR/plugins"
 
-PLGREPO="https://github.com/${PLGSREPO}.git"
+echo "🚀 Starting Deployment to $TARGET"
+# 1. Prepare Workspace
+rm -rf $WORK_DIR && mkdir -p $WORK_DIR && mkdir -p $MDLPLGS
 
-rm -rf $WORK_DIR && mkdir -p $WORK_DIR
+# 2. Download the Latest Compressed Release
+echo "📥 Fetching latest .tar.xz release from GitHub..."
+# Using the specific filtering we discussed for the .tar.xz asset
+DOWNLOAD_URL=$(curl -s "https://api.github.com/repos/$PLGSREPO/releases/latest" | grep "browser_download_url" | cut -d : -f 2,3 | tr -d '\" ')
+
+echo "🔗 Download URL: $DOWNLOAD_URL"
+
+if [ -z "$DOWNLOAD_URL" ]; then
+    echo "❌ Error: Could not find .tar.xz asset in the latest release."
+    exit 1
+fi
+
+wget -q "$DOWNLOAD_URL" -O "$WORK_DIR/plugins-update.tar.xz"
+
+# 3. Decompress the Artifact
+echo "📦 Extracting plugins..."
+# In POSIX sh, we ensure the directory exists and extract there
+tar -xJf "$WORK_DIR/plugins-update.tar.xz" -C "$MDLPLGS"
 
 # FIX: Add the target directory to the safe list for Git
 echo "🛡️ Configuring Git safe directory..."
-git config --global --add safe.directory "$TARGET"
+git config --global --add safe.directory "$MDLCORE"
 
 if [ ! -d "$TARGET/.git" ]; then
     # 2. 🚀 Clone Core and Plugins
     echo "📥 Fetching Moodle Core ($MDLBRANCH)..."
     git clone --depth=1 --branch=$MDLBRANCH $MDLREPO $MDLCORE
-
-    echo "📥 Fetching Custom Plugins ($PLGBRANCH)..."
-    git clone --depth=1 --recursive --branch=$PLGBRANCH $PLGREPO $MDLPLGS
 
     # 3. 🧩 Merge Plugins into Core
     echo "📂 Merging plugins into core..."

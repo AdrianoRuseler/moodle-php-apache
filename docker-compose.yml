@@ -24,13 +24,13 @@ services:
       - MOODLE_URL=${MOODLE_URL}
       - MDLREPO=${MDLREPO}
       - MDLBRANCH=${MDLBRANCH}
-      - PLGREPO=${PLGREPO}
+      - PLGSREPO=${PLGSREPO}
       - PLGBRANCH=${PLGBRANCH}
       - MDLHOME=${MDLHOME}
     volumes:
       - moodle_data:${MDLHOME}
       - ./scripts:/scripts:ro
-    entrypoint: [ "/bin/sh", "/scripts/init-moodle.sh" ]
+    entrypoint: [ "/bin/sh", "/scripts/init-plugins-release.sh" ]
   moodle:
     image: ruseler/moodle-php-apache:latest
     container_name: moodle-app
