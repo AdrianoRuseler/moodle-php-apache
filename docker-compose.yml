@@ -27,6 +27,7 @@ services:
       - PLGSREPO=${PLGSREPO}
       - PLGBRANCH=${PLGBRANCH}
       - MDLHOME=${MDLHOME}
+      - APACHE_DOC=${APACHE_DOC}
     volumes:
       - moodle_data:${MDLHOME}
       - ./scripts:/scripts:ro

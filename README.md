@@ -46,11 +46,11 @@ docker exec -it -u www-data moodle-app composer install --no-dev --classmap-auth
 ## Initialize Moodle database for manual testing
 
 ```bash
-docker exec -it -u www-data moodle-app php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --summary="Docker moodle site" --adminpass="M@0dl3ing" --adminemail="admin@example.com"
+docker exec -it -u www-data moodle-app php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --summary="Docker moodle site" --adminpass="M@0dl3ing" --adminemail="admin@host.docker.internal"
 ```
 
 ```bash
-docker exec -it -u www-data moodle-cron php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --summary="Docker moodle site" --adminpass="M@0dl3ing" --adminemail="admin@example.com"
+docker exec -it -u www-data moodle-cron php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --summary="Docker moodle site" --adminpass="M@0dl3ing" --adminemail="admin@host.docker.internal"
 ```
 
 ## Moodle CLI
