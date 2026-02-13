@@ -44,7 +44,6 @@ services:
       - "${HOST_PORT}:80"
     environment:
       - MOODLE_DB_TYPE=pgsql
-      - MOODLE_DB_TYPE=pgsql
       - MOODLE_DB_HOST=moodle-db
       - MOODLE_DB_NAME=${DB_NAME}
       - MOODLE_DB_USER=${DB_USER}
@@ -66,7 +65,7 @@ services:
       - moodle_data:${MDLHOME}
       - moodledata_private:/var/www/moodledata
     # This runs the Moodle cron script every 60 seconds
-    entrypoint: /bin/sh -c "while true; do php ${MDLHOME}/admin/cli/cron.php; sleep 60; done"
+    entrypoint: /bin/sh -c "while true; do php ${MDLHOME}/admin/cli/cron.php > /proc/1/fd/1 2>/proc/1/fd/2; sleep 60; done"
     restart: always
 
 volumes:
