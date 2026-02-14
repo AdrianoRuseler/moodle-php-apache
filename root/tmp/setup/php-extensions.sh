@@ -57,7 +57,7 @@ docker-php-ext-install -j$(nproc) ldap
 # Since you are already using Redis, you generally don't need Memcached.
 # APCu, igbinary, PCov, Redis, Solr, timezonedb, uuid
 pecl install apcu igbinary pcov solr timezonedb uuid yaml
-docker-php-ext-enable apcu igbinary pcov solr timezonedb uuid yaml
+docker-php-ext-enable apcu igbinary pcov solr timezonedb uuid yaml mysqli
 
 echo 'apc.enable_cli = On' >> /usr/local/etc/php/conf.d/10-docker-php-ext-apcu.ini
 

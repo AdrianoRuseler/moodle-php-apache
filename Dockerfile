@@ -10,6 +10,19 @@ RUN apt-get update && apt-get install -y \
     bc default-mysql-client-core locales wget \
 && rm -rf /var/lib/apt/lists/*
 
+# 1. Set an environment variable for easier updates
+ENV TZ=America/Sao_Paulo
+
+# 2. Configure the OS timezone
+# We use 'noninteractive' to prevent tzdata from prompting for input
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# 3. Configure PHP's timezone
+# This creates a custom .ini file to override the default setting
+RUN echo "date.timezone = $TZ" > /usr/local/etc/php/conf.d/docker-php-ext-timezone.ini
+
+# Verify the settings
+RUN php -r "echo 'PHP Timezone: ' . date_default_timezone_get() . PHP_EOL;"
 
 # 2. Configure and generate locales
 RUN sed -i -e 's/# en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/' /etc/locale.gen && \

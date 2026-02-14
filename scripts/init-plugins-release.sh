@@ -65,9 +65,9 @@ unset(\$CFG);
 global \$CFG;
 \$CFG = new stdClass();
 
-\$CFG->dbtype    = 'pgsql';
+\$CFG->dbtype    = '${DB_TYPE}';
 \$CFG->dblibrary = 'native';
-\$CFG->dbhost    = 'moodle-db';
+\$CFG->dbhost    = '${DB_HOST}';
 \$CFG->dbname    = '${DB_NAME}';
 \$CFG->dbuser    = '${DB_USER}';
 \$CFG->dbpass    = '${DB_PASS}';

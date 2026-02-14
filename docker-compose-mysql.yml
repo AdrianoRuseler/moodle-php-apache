@@ -1,18 +1,17 @@
 services:
-  mariadb:
-    image: mariadb:latest
-    # docker pull mariadb:latest
-    container_name: mariadb
+  mysql-db:
+    image: mysql:latest
+    # docker pull mysql:oracle
+    container_name: mysql-db
     volumes:
       - moodle_db_data:/var/lib/mysql
     environment:
-      - MARIADB_USER=${DB_USER}
-      - MARIADB_DATABASE=${DB_NAME} 
-      - MARIADB_PASSWORD=${DB_PASS}
-      - MARIADB_ROOT_PASSWORD=${DB_PASS}
-      - MARIADB_CHARACTER_SET=utf8mb4
-      - MARIADB_COLLATE=utf8mb4_unicode_ci
-      - TZ=America/Sao_Paulo
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_DATABASE=${DB_NAME} 
+      - MYSQL_PASSWORD=${DB_PASS}
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
+      - MYSQL_CHARACTER_SET=utf8mb4
+      - MYSQL_COLLATE=utf8mb4_unicode_ci
   redis:
     image: redis:alpine
     container_name: moodle-redis
@@ -35,7 +34,7 @@ services:
     depends_on:
       moodle-cli:
         condition: service_completed_successfully
-      mariadb:
+      mysql-db:
         condition: service_started
     ports:
       - "${HOST_PORT}:80"
@@ -48,7 +47,6 @@ services:
       - MOODLE_URL=${MOODLE_URL}
       - MOODLE_REDIS_HOST=redis
       - APACHE_DOCUMENT_ROOT=${APACHE_DOC}
-      - TZ=America/Sao_Paulo
     volumes:
       - moodle_data:${MDLHOME}
       - moodledata_private:/var/www/moodledata
@@ -57,10 +55,8 @@ services:
     image: ruseler/moodle-php-cli:latest
     container_name: moodle-cron
     depends_on:
-      - mariadb
+      - mysql-db
       - moodle
-    environment:
-      - TZ=America/Sao_Paulo
     volumes:
       - moodle_data:${MDLHOME}
       - moodledata_private:/var/www/moodledata
@@ -76,9 +72,8 @@ services:
       - PMA_PORT=3306
       - PMA_USER=${DB_USER}
       - PMA_PASSWORD=${DB_PASS}
-      - TZ=America/Sao_Paulo
     depends_on:
-      - mariadb
+      - mysql-db
 volumes:
   moodle_db_data:
   moodle_data:
