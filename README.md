@@ -1,10 +1,10 @@
 # moodle-php-apache
 PHP + Apache docker images for Moodle 
 
-## php:8.4-apache-trixie
+## php:8.2-apache-trixie
 
 ```bash
-docker pull php:8.4-apache-trixie
+docker pull php:8.2-apache-trixie
 ```
 
 ## Docker HUB
@@ -12,7 +12,7 @@ docker pull php:8.4-apache-trixie
 - https://hub.docker.com/r/ruseler/moodle-php-apache
 
 ```bash
-docker build -t ruseler/moodle-php-apache:latest .
+docker build -t ruseler/moodle-php-apache:8.2 .
 ```
 
 ## Config
@@ -98,6 +98,20 @@ docker exec -u www-data moodle-cron dot -V
 docker exec moodle-db pg_dump -U moodleuser moodle > moodle_backup_$(date +%F).sql
 docker exec moodle-db pg_dump -U moodleuser moodle > backup.sql
 ```
+
+Self-Termination: The script will automatically exit after 180 seconds (or whatever value you set). Because your Docker restart: always or the while true loop is present, it will immediately start a fresh process. This prevents potential PHP memory leaks from building up over days.
+
+Native Concurrency: Moodle's internal task manager is smarter than a shell loop; it knows how to handle lock files properly so you don't accidentally run the same heavy task twice.
+
+
+To get the most out of this, log in to your Moodle site as an Admin and navigate to:
+Site Administration > Server > Tasks > Task processing
+
+Check these two settings:
+
+- Concurrency limit for adhoc tasks: If you have a multi-core CPU, set this to 2 or 3 to allow multiple tasks to run at the exact same time.
+- Adhoc task runner lifetime: Set this to match your --keep-alive value (e.g., 180).
+
 
 ## References
 - https://github.com/moodlehq/moodle-php-apache

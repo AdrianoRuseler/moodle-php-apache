@@ -21,7 +21,7 @@ services:
     restart: always
 
   moodle-cli:
-    image: ruseler/moodle-php-cli:latest
+    image: ruseler/moodle-php-cli:8.2
     container_name: moodle-cli
     env_file:
       - ./.env
@@ -30,7 +30,7 @@ services:
       - ./scripts:/scripts:ro
     entrypoint: [ "/bin/sh", "/scripts/init-plugins-release.sh" ]
   moodle:
-    image: ruseler/moodle-php-apache:latest
+    image: ruseler/moodle-php-apache:8.2
     container_name: moodle-app
     depends_on:
       moodle-cli:
@@ -54,7 +54,7 @@ services:
       - moodledata_private:/var/www/moodledata
 
   moodle-cron:
-    image: ruseler/moodle-php-cli:latest
+    image: ruseler/moodle-php-cli:8.2
     container_name: moodle-cron
     depends_on:
       - mariadb
@@ -64,9 +64,11 @@ services:
     volumes:
       - moodle_data:${MDLHOME}
       - moodledata_private:/var/www/moodledata
-    # This runs the Moodle cron script every 60 seconds
-    entrypoint: /bin/sh -c "while true; do php ${MDLHOME}/admin/cli/cron.php > /proc/1/fd/1 2>/proc/1/fd/2; sleep 60; done"
+    # Uses Moodle's native keep-alive (3 minutes) and restarts immediately on exit
+    entrypoint: /bin/sh -c "while true; do php ${MDLHOME}/admin/cli/cron.php --keep-alive=180; done"
     restart: always
+   # deploy:
+   #   replicas: 2
   phpmyadmin:
     image: linuxserver/phpmyadmin:latest
     ports:
