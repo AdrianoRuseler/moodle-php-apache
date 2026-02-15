@@ -27,12 +27,6 @@ $defaults['moodle']['pathtopdftoppm'] = '/usr/bin/pdftoppm';
 $defaults['moodle']['pathtopython'] = '/usr/bin/python3';
 ```
 
-## References
-- https://github.com/moodlehq/moodle-php-apache
-- https://github.com/moodlehq/moodle-docker
-- https://github.com/erseco/alpine-moodle
-- https://github.com/tmuras/moosh
-
 ## Composer
 
 ```bash
@@ -104,3 +98,9 @@ docker exec -u www-data moodle-cron dot -V
 docker exec moodle-db pg_dump -U moodleuser moodle > moodle_backup_$(date +%F).sql
 docker exec moodle-db pg_dump -U moodleuser moodle > backup.sql
 ```
+
+## References
+- https://github.com/moodlehq/moodle-php-apache
+- https://github.com/moodlehq/moodle-docker
+- https://github.com/erseco/alpine-moodle
+- https://github.com/tmuras/moosh
