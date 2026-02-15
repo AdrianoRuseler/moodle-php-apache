@@ -1,10 +1,10 @@
 # moodle-php-apache
 PHP + Apache docker images for Moodle 
 
-## php:8.2-apache-trixie
+## php:8.3-apache-trixie
 
 ```bash
-docker pull php:8.2-apache-trixie
+docker pull php:8.3-apache-trixie
 ```
 
 ## Docker HUB
@@ -12,7 +12,7 @@ docker pull php:8.2-apache-trixie
 - https://hub.docker.com/r/ruseler/moodle-php-apache
 
 ```bash
-docker build -t ruseler/moodle-php-apache:8.2 .
+docker build -t ruseler/moodle-php-apache:8.3 .
 ```
 
 ## Config
@@ -49,7 +49,7 @@ docker exec -it -u www-data moodle-cron php admin/cli/install_database.php --agr
 
 ## Moodle CLI
 
-- FROM php:8.4-cli-trixie
+- FROM php:${PHP_VERSION}-cli-trixie
 
 ```bash
 docker exec -it -u www-data moodle-cron composer install --no-dev --classmap-authoritative

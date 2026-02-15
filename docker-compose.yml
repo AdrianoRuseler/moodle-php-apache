@@ -21,7 +21,7 @@ services:
     restart: always
 
   moodle-cli:
-    image: ruseler/moodle-php-cli:8.2
+    image: ruseler/moodle-php-cli:${PHP_VERSION}
     container_name: moodle-cli
     env_file:
       - ./.env
@@ -30,7 +30,7 @@ services:
       - ./scripts:/scripts:ro
     entrypoint: [ "/bin/sh", "/scripts/init-plugins-release.sh" ]
   moodle:
-    image: ruseler/moodle-php-apache:8.2
+    image: ruseler/moodle-php-apache:${PHP_VERSION}
     container_name: moodle-app
     depends_on:
       moodle-cli:
@@ -54,7 +54,7 @@ services:
       - moodledata_private:/var/www/moodledata
 
   moodle-cron:
-    image: ruseler/moodle-php-cli:8.2
+    image: ruseler/moodle-php-cli:${PHP_VERSION}
     container_name: moodle-cron
     depends_on:
       - mariadb
