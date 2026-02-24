@@ -23,9 +23,9 @@ unset(\$CFG);
 global \$CFG;
 \$CFG = new stdClass();
 
-\$CFG->dbtype    = 'pgsql';
+\$CFG->dbtype    = '${DB_TYPE}';
 \$CFG->dblibrary = 'native';
-\$CFG->dbhost    = 'moodle-db';
+\$CFG->dbhost    = '${DB_HOST}';
 \$CFG->dbname    = '${DB_NAME}';
 \$CFG->dbuser    = '${DB_USER}';
 \$CFG->dbpass    = '${DB_PASS}';
@@ -35,12 +35,6 @@ global \$CFG;
 \$CFG->wwwroot   = '${MOODLE_URL}';
 \$CFG->dataroot  = '/var/www/moodledata';
 \$CFG->admin     = 'admin';
-
-// System Paths
-\$CFG->pathtogs = '${PATH_TO_GS}';
-\$CFG->pathtodot = '${PATH_TO_DOT}';
-\$CFG->aspellpath = '${PATH_TO_ASPELL}';
-\$CFG->pathtopython = '${PATH_TO_PYTHON}';
 
 \$CFG->directorypermissions = 0777;
 
