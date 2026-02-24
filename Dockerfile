@@ -1,4 +1,10 @@
-FROM php:8.3-apache-trixie
+ARG PHP_VERSION
+FROM php:${PHP_VERSION}-apache-trixie
+
+# Optional: If you need the variable AFTER the FROM (inside the build), 
+# you must redeclare it:
+ARG PHP_VERSION
+RUN echo "Building with PHP version: ${PHP_VERSION}"
 
 # So we can use it anywhere for conditional stuff. Keeping BC with old (non-buildkit, builders)
 ARG TARGETPLATFORM

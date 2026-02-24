@@ -15,6 +15,14 @@ docker pull php:8.3-apache-trixie
 docker build -t ruseler/moodle-php-apache:8.3 .
 ```
 
+```bash
+# 1. Load the variable into your current shell
+export $(grep PHP_VERSION .env | xargs)
+
+# 2. Run the build using the shell variable
+docker build --build-arg PHP_VERSION=$PHP_VERSION -t ruseler/moodle-php-apache:$PHP_VERSION .
+```
+
 ## Config
 
 ```php
