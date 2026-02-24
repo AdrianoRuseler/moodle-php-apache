@@ -1,0 +1,27 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+
+  // Terminal Setup: Switching to Git Bash for a true Bash experience
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+
+  // Docker specific formatting
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-containers"
+  },
+
+  // Shell specific formatting (Keeps it from breaking your JSON/MD)
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+
+  // Markdown specific formatting
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one",
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.renderWhitespace": "all"
+  },
+
+  // Prettier as the fallback for JSON, JS, etc.
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}

@@ -1,0 +1,24 @@
+{
+  "recommendations": [
+    /* Docker & Dev Containers */
+    "ms-azuretools.vscode-docker",
+    "ms-vscode-remote.remote-containers",
+    "irongeek.vscode-env",
+
+    /* Bash & Shell Scripting */
+    "timonwong.shellcheck",
+    "foxundermoon.shell-format",
+
+    /* Markdown & Documentation */
+    "yzhang.markdown-all-in-one",
+    "tomasdahlqvist.markdown-admonitions",
+    "bierner.markdown-footnotes",
+    "bierner.markdown-mermaid",
+    "davidanson.vscode-markdownlint",
+
+    /* Formatting & UI */
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "pkief.material-icon-theme"
+  ]
+}
