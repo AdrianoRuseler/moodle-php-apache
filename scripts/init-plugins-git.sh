@@ -60,12 +60,6 @@ global \$CFG;
 \$CFG->dataroot  = '/var/www/moodledata';
 \$CFG->admin     = 'admin';
 
-// System Paths
-\$CFG->pathtogs = '${PATH_TO_GS}';
-\$CFG->pathtodot = '${PATH_TO_DOT}';
-\$CFG->aspellpath = '${PATH_TO_ASPELL}';
-\$CFG->pathtopython = '${PATH_TO_PYTHON}';
-
 \$CFG->directorypermissions = 0777;
 
 require_once(__DIR__ . '/lib/setup.php');
@@ -73,10 +67,43 @@ EOF
 
     echo "🔐 Setting permissions..."
     chown -R 33:33 "$TARGET"
-    echo "✅ Init complete."
+    ## Install Moodle and Upgrade
+    mdlver=$(cat $APACHE_DOC/version.php | grep '$release' | cut -d\' -f 2) # Gets Moodle Version
+    php $MDLHOME/admin/cli/install_database.php --agree-license --fullname="Moodle $mdlver" --shortname="Moodle $mdlver" --adminpass="M@0dl3ing" --adminemail="admin@host.docker.internal"
+
+    echo "ℹ️ Admin settings configuration..."
+
+    echo "📂 System paths..."
+    #php cfg.php --name=<configname> [--component=<componentname>] --set=<value>
+    php $MDLHOME/admin/cli/cfg.php --name=pathtophp --set=/usr/local/bin/php
+    php $MDLHOME/admin/cli/cfg.php --name=pathtodu --set=/usr/bin/du
+    php $MDLHOME/admin/cli/cfg.php --name=pathtogs --set=/usr/bin/gs
+    php $MDLHOME/admin/cli/cfg.php --name=pathtopdftoppm --set=/usr/bin/pdftoppm
+    php $MDLHOME/admin/cli/cfg.php --name=pathtodot --set=/usr/bin/dot
+    php $MDLHOME/admin/cli/cfg.php --name=aspellpath --set=/usr/bin/aspell
+    php $MDLHOME/admin/cli/cfg.php --name=pathtopython --set=/usr/bin/python3
+    
 else
     echo "ℹ️ Moodle code already exists, skipping clone."
     # Optional: Run composer install again in case dependencies changed
     cd "$TARGET"
     composer install --no-dev --classmap-authoritative
 fi
+
+
+# Run cron to finalize plugin installation and any pending tasks
+#echo "🆙 Running cron -> null..."
+#php $MDLHOME/admin/cli/cron.php >/dev/null
+#php $MDLHOME/admin/cli/cron.php
+
+# Run checks to verify everything is set up correctly
+# php $MDLHOME/admin/cli/checks.php
+
+
+# Admin settings
+# MDLHOME="/var/www/html"
+#php $MDLHOME/admin/cli/cfg.php --help
+#php $MDLHOME/admin/cli/cfg.php --json
+
+
+echo "✅ Moodle Init completed!!!"

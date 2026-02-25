@@ -7,7 +7,7 @@ services:
       - moodle_db_data:/var/lib/mysql
     environment:
       - MARIADB_USER=${DB_USER}
-      - MARIADB_DATABASE=${DB_NAME}
+      - MARIADB_DATABASE=${DB_NAME} 
       - MARIADB_PASSWORD=${DB_PASS}
       - MARIADB_ROOT_PASSWORD=${DB_PASS}
       - MARIADB_CHARACTER_SET=utf8mb4
@@ -23,14 +23,12 @@ services:
   moodle-cli:
     image: ruseler/moodle-php-cli:${PHP_VERSION}
     container_name: moodle-cli
-    depends_on:
-      - mariadb
     env_file:
       - ./.env
     volumes:
       - moodle_data:${MDLHOME}
       - ./scripts:/scripts:ro
-    entrypoint: [ "/bin/sh", "/scripts/init-plugins-git.sh" ]
+    entrypoint: [ "/bin/sh", "/scripts/init-plugins-release.sh" ]
   moodle:
     image: ruseler/moodle-php-apache:${PHP_VERSION}
     container_name: moodle-app
@@ -69,8 +67,8 @@ services:
     # Uses Moodle's native keep-alive (3 minutes) and restarts immediately on exit
     entrypoint: /bin/sh -c "while true; do php ${MDLHOME}/admin/cli/cron.php --keep-alive=180; done"
     restart: always
-  # deploy:
-  #   replicas: 2
+   # deploy:
+   #   replicas: 2
   phpmyadmin:
     image: linuxserver/phpmyadmin:latest
     ports:
