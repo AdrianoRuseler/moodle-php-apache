@@ -1,19 +1,15 @@
 # moodle-php-apache
 PHP + Apache docker images for Moodle 
 
-## php:8.3-apache-trixie
+## php:${PHP_VERSION}-apache-trixie
 
 ```bash
-docker pull php:8.3-apache-trixie
+docker pull php:${PHP_VERSION}-apache-trixie
 ```
 
 ## Docker HUB
 
 - https://hub.docker.com/r/ruseler/moodle-php-apache
-
-```bash
-docker build -t ruseler/moodle-php-apache:8.3 .
-```
 
 ```bash
 # 1. Load the variable into your current shell
