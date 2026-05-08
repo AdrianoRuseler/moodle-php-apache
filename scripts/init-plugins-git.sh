@@ -60,6 +60,8 @@ global \$CFG;
 \$CFG->dataroot  = '/var/www/moodledata';
 \$CFG->admin     = 'admin';
 
+\$CFG->routerconfigured = true;
+
 \$CFG->directorypermissions = 0777;
 
 require_once(__DIR__ . '/lib/setup.php');
